@@ -19,4 +19,6 @@ public:
 	virtual double get(double E_proj, double E_secondary) const = 0;
 };
 
+double sigma_inel(double Tp);
+
 #endif /* INCLUDE_XSECS_BASE_H_ */

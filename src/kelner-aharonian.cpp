@@ -1,25 +1,8 @@
 #include "kelner-aharonian.h"
+#include "utilities.h"
 #include <cmath>
 #include <algorithm>
 #include <iostream>
-
-/**
- * This function calculates the pp total inelastic cross section
- *
- * @param T_p is the proton kinetic energy in the LAB frame in [GeV]
- * @return inelastic cross section in [mb]
- */
-
-double sigma_inel(double T_p) {
-	const double m_p = 0.938272;
-	const double m_pi = 0.134976;
-	const double T_th = 2.0 * m_pi + (m_pi * m_pi) / (2.0 * m_p);
-
-	double L = std::log(T_p / T_th);
-	double Threshold = std::max(0., 1. - std::pow(T_th / T_p, 1.9));
-
-	return (T_p > T_th) ? (30.7 - 0.96 * L + 0.18 * L * L) * std::pow(Threshold, 3.) : 0;
-}
 
 /**
  * Calculates gamma-ray differential cross
