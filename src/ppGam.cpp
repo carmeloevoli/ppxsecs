@@ -76,7 +76,6 @@ double sigma_2_pi(double Tp) {
 
 	if (Tp < 0.56)  // GeV
 		return 0.0; // mb
-
 	if (Tp >= 0.56 && Tp <= 2.0) { // GeV
 		double XS_2_pi = 5.7 / (1.0 + std::exp(-9.3 * (Tp - 1.4))); // mb
 		return XS_2_pi;
@@ -94,16 +93,11 @@ double multip_pi0_Geant4(double Tp) {
 //	"""
 	if (Tp <= 2.0) // GeV
 		return 0.0;
-
 	else if (Tp > 2.0 && Tp < 5.0) { // GeV
 		double Qp = (Tp - Tp_th) / m_p;
 		double multip_pi0 = -6.0e-3 + 0.237 * Qp - 0.023 * pow2(Qp);
 		return multip_pi0;
-	}
-
-	else {
-//	# Geant4:
-//	# ------------------------
+	} else {
 		const double a_1 = 0.728;
 		const double a_2 = 0.596;
 		const double a_3 = 0.491;
@@ -259,22 +253,16 @@ double Amax_Geant4(double Tp) {
 
 	if (Tp <= Tp_th)
 		return 0.0;
-
 	else if (Tp < 1.0) { // GeV
 		double Amax = 5.9 * sigma_pi_Geant4(Tp) / E_pi_max_LAB(Tp);
 		return Amax;
-	}
-
-	else if (Tp < 5.0) { // GeV
+	} else if (Tp < 5.0) { // GeV
 		const double b_1 = 9.53;
 		const double b_2 = -0.52;
 		const double b_3 = 0.054;
 		double Amax = b_1 * std::pow(theta_p, b_2) * std::exp(b_3 * pow2(Ltheta_p)) * sigma_pi_Geant4(Tp) / m_p;
 		return Amax;
-	}
-
-	else {
-
+	} else {
 		const double b_1 = 9.13;
 		const double b_2 = -0.35;
 		const double b_3 = 9.7e-3;
