@@ -4,13 +4,15 @@
 #include "kamae.h"
 #include "kelner-aharonian.h"
 #include "ppGam.h"
+#include "Timer.h"
 
 void print(const XSECS& xsecs, const std::string& filename) {
+	Timer timer;
 	std::ofstream outfile(filename.c_str());
 	if (outfile.is_open()) {
 		outfile << std::scientific << std::setprecision(4);
 		outfile << "# E [GeV] - sigma [mb]\n";
-		for (double E = 1; E < 3e6; E *= 1.01) {
+		for (double E = .1; E < 3e6; E *= 1.01) {
 			outfile << E << " ";
 			outfile << xsecs.get(1e1, E) << " ";
 			outfile << xsecs.get(1e2, E) << " ";
@@ -23,11 +25,12 @@ void print(const XSECS& xsecs, const std::string& filename) {
 }
 
 void printPPGam(PPGam ppgam, const std::string& filename) {
+	Timer timer;
 	std::ofstream outfile(filename.c_str());
 	if (outfile.is_open()) {
 		outfile << std::scientific << std::setprecision(4);
 		outfile << "# E [GeV] - sigma [mb]\n";
-		for (double E = 1; E < 3e6; E *= 1.01) {
+		for (double E = .1; E < 3e6; E *= 1.01) {
 			outfile << E << " ";
 			ppgam.set_interaction_model("GEANT4");
 			outfile << ppgam.get(1e1, E) << " ";
