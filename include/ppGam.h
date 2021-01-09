@@ -1,25 +1,23 @@
+// Copyright MIT license Carmelo Evoli 2020
 #ifndef INCLUDE_PPGAM_H_
 #define INCLUDE_PPGAM_H_
 
-#include "xsecs-base.h"
 #include <string>
 
-class PPGam: public XSECS {
-public:
-	PPGam(Particle particle) :
-			XSECS(particle) {
-	}
+#include "xsecs-base.h"
 
-	double get(double E_proj, double E_secondary) const override;
+class PPGam : public XSECS {
+ public:
+  PPGam(Particle particle) : XSECS(particle) {}
 
-	enum InteractionModel {
-		GEANT4, PYTHIA8, QGSJET, SIBYLL
-	};
+  double get(double E_proj, double E_secondary) const override;
 
-	void set_interaction_model(const std::string& model_name);
+  enum InteractionModel { GEANT4, PYTHIA8, QGSJET, SIBYLL };
 
-protected:
-	InteractionModel m_intmodel = QGSJET;
+  void set_interaction_model(const std::string& model_name);
+
+ protected:
+  InteractionModel m_intmodel = QGSJET;
 };
 
 #endif /* INCLUDE_PPGAM_H_ */
