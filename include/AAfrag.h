@@ -31,7 +31,7 @@ class AAfrag : public XSECS {
     gsl_interp_accel_free(yacc);
   }
 
-  double get(double E_proj, double E_secondary) const override;
+  double dsigmadE(double E_proj, double E_secondary) const override;
 
  protected:
   void load_table(const std::string &filename);

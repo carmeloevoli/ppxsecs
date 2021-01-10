@@ -8,13 +8,13 @@
 
 class PPGam : public XSECS {
  public:
-  PPGam(Particle particle) : XSECS(particle) {}
-
-  double get(double E_proj, double E_secondary) const override;
-
   enum InteractionModel { GEANT4, PYTHIA8, QGSJET, SIBYLL };
 
+  PPGam(Particle particle, InteractionModel model) : XSECS(particle), m_intmodel(model) {}
+
   void set_interaction_model(const std::string& model_name);
+
+  double dsigmadE(double E_proj, double E_secondary) const override;
 
  protected:
   InteractionModel m_intmodel = QGSJET;

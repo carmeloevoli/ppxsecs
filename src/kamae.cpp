@@ -1,4 +1,4 @@
-// Copyright Carmelo Evoli 2020
+// Copyright MIT license Carmelo Evoli 2020
 #include "kamae.h"
 
 #include "cparamlib.h"
@@ -40,11 +40,8 @@ double neutrinos_xsec(double E_proj, double E_nu) {
   return value / E_nu;
 }
 
-double Kamae::get(double E_proj, double E_secondary) const {
-  if (E_secondary > E_proj) return 0;
-
+double Kamae::dsigmadE(double E_proj, double E_secondary) const {
   double value = 0;
-
   if (m_particle == Particle::photons) {
     value = gamma_xsec(E_proj, E_secondary);
   } else if (m_particle == Particle::neutrinos) {

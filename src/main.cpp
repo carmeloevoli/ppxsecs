@@ -1,80 +1,73 @@
 // Copyright MIT license Carmelo Evoli 2020
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-
 #include "AAfrag.h"
-#include "Timer.h"
 #include "kamae.h"
 #include "kelner-aharonian.h"
 #include "ppGam.h"
 
-void print(const XSECS& xsecs, const std::string& filename) {
-  Timer timer;
-  std::ofstream outfile(filename.c_str());
-  if (outfile.is_open()) {
-    outfile << std::scientific << std::setprecision(4);
-    outfile << "# E [GeV] - sigma [mb]\n";
-    for (double E = .1; E < 3e6; E *= 1.01) {
-      outfile << E << " ";
-      outfile << xsecs.get(1e1, E) << " ";
-      outfile << xsecs.get(1e2, E) << " ";
-      outfile << xsecs.get(1e3, E) << " ";
-      outfile << xsecs.get(1e5, E) << " ";
-      outfile << "\n";
-    }
-  }
-  outfile.close();
-}
-
-void printPPGam(PPGam ppgam, const std::string& filename) {
-  Timer timer;
-  std::ofstream outfile(filename.c_str());
-  if (outfile.is_open()) {
-    outfile << std::scientific << std::setprecision(4);
-    outfile << "# E [GeV] - sigma [mb]\n";
-    for (double E = .1; E < 3e6; E *= 1.01) {
-      outfile << E << " ";
-      ppgam.set_interaction_model("GEANT4");
-      outfile << ppgam.get(1e1, E) << " ";
-      outfile << ppgam.get(1e2, E) << " ";
-      outfile << ppgam.get(1e3, E) << " ";
-      outfile << ppgam.get(1e5, E) << " ";
-      ppgam.set_interaction_model("PYTHIA8");
-      outfile << ppgam.get(1e1, E) << " ";
-      outfile << ppgam.get(1e2, E) << " ";
-      outfile << ppgam.get(1e3, E) << " ";
-      outfile << ppgam.get(1e5, E) << " ";
-      ppgam.set_interaction_model("QGSJET");
-      outfile << ppgam.get(1e1, E) << " ";
-      outfile << ppgam.get(1e2, E) << " ";
-      outfile << ppgam.get(1e3, E) << " ";
-      outfile << ppgam.get(1e5, E) << " ";
-      ppgam.set_interaction_model("SIBYLL");
-      outfile << ppgam.get(1e1, E) << " ";
-      outfile << ppgam.get(1e2, E) << " ";
-      outfile << ppgam.get(1e3, E) << " ";
-      outfile << ppgam.get(1e5, E) << " ";
-      outfile << "\n";
-    }
-  }
-  outfile.close();
-}
-
 int main() {
   try {
-    Kamae kamae(Particle::photons);
-    KelnerAharonian kelner(Particle::photons);
-    AAfrag aafrag(Particle::photons);
-
-    print(kamae, "specgamma-kamae.txt");
-    print(kelner, "specgamma-kelner.txt");
-    print(aafrag, "specgamma-aafrag.txt");
-
-    PPGam ppgam(Particle::photons);
-
-    printPPGam(ppgam, "specgamma-ppgam.txt");
-
+    {
+      Kamae kamae(XSECS::Particle::photons);
+      kamae.print("specgamma-kamae.txt");
+      kamae.print_rate("rategamma-kamae.txt");
+    }
+    {
+      Kamae kamae(XSECS::Particle::neutrinos);
+      kamae.print("specnu-kamae.txt");
+      kamae.print_rate("ratenu-kamae.txt");
+    }
+    {
+      KelnerAharonian kelner(XSECS::Particle::photons);
+      kelner.print("specgamma-kelner.txt");
+      kelner.print_rate("rategamma-kelner.txt");
+    }
+    {
+      KelnerAharonian kelner(XSECS::Particle::neutrinos);
+      kelner.print("specnu-kelner.txt");
+      kelner.print_rate("ratenu-kelner.txt");
+    }
+    {
+      AAfrag aafrag(XSECS::Particle::photons);
+      aafrag.print("specgamma-aafrag.txt");
+      aafrag.print_rate("rategamma-aafrag.txt");
+    }
+    {
+      AAfrag aafrag(XSECS::Particle::neutrinos);
+      aafrag.print("specnu-aafrag.txt");
+      aafrag.print_rate("ratenu-aafrag.txt");
+    }
+    {
+      PPGam ppgam(XSECS::Particle::photons, PPGam::InteractionModel::GEANT4);
+      ppgam.print("specgamma-ppgam-GEANT4.txt");
+    }
+    {
+      PPGam ppgam(XSECS::Particle::neutrinos, PPGam::InteractionModel::GEANT4);
+      ppgam.print("specnu-ppgam-GEANT4.txt");
+    }
+    {
+      PPGam ppgam(XSECS::Particle::photons, PPGam::InteractionModel::PYTHIA8);
+      ppgam.print("specgamma-ppgam-PYTHIA8.txt");
+    }
+    {
+      PPGam ppgam(XSECS::Particle::neutrinos, PPGam::InteractionModel::PYTHIA8);
+      ppgam.print("specnu-ppgam-PYTHIA8.txt");
+    }
+    {
+      PPGam ppgam(XSECS::Particle::photons, PPGam::InteractionModel::QGSJET);
+      ppgam.print("specgamma-ppgam-QGSJET.txt");
+    }
+    {
+      PPGam ppgam(XSECS::Particle::neutrinos, PPGam::InteractionModel::QGSJET);
+      ppgam.print("specnu-ppgam-QGSJET.txt");
+    }
+    {
+      PPGam ppgam(XSECS::Particle::photons, PPGam::InteractionModel::SIBYLL);
+      ppgam.print("specgamma-ppgam-SIBYLL.txt");
+    }
+    {
+      PPGam ppgam(XSECS::Particle::neutrinos, PPGam::InteractionModel::SIBYLL);
+      ppgam.print("specnu-ppgam-SIBYLL.txt");
+    }
   } catch (const std::exception& e) {
     std::cout << "\n" << e.what() << "\n";
   }

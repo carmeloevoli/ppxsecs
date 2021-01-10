@@ -476,6 +476,8 @@ double dsigma_dEgamma_Geant4(double Tp, double Egamma) {
   return Amax_Geant4(Tp) * F_Geant4(Tp, Egamma);
 }
 
+double dsigma_dEnu_Geant4(double Tp, double Egamma) { return 0; }
+
 double dsigma_dEgamma_Pythia8(double Tp, double Egamma) {
   //	"""
   //	This function calculates the pp->pi0->gamma-ray
@@ -488,6 +490,8 @@ double dsigma_dEgamma_Pythia8(double Tp, double Egamma) {
   //	"""
   return Amax_Pythia8(Tp) * F_Pythia8(Tp, Egamma);
 }
+
+double dsigma_dEnu_Pythia8(double Tp, double Egamma) { return 0; }
 
 double dsigma_dEgamma_SIBYLL(double Tp, double Egamma) {
   //	"""
@@ -502,6 +506,8 @@ double dsigma_dEgamma_SIBYLL(double Tp, double Egamma) {
   return Amax_SIBYLL(Tp) * F_SIBYLL(Tp, Egamma);
 }
 
+double dsigma_dEnu_SIBYLL(double Tp, double Egamma) { return 0; }
+
 double dsigma_dEgamma_QGSJET(double Tp, double Egamma) {
   //	"""
   //	This function calculates the pp->pi0->gamma-ray
@@ -514,6 +520,8 @@ double dsigma_dEgamma_QGSJET(double Tp, double Egamma) {
   //	"""
   return Amax_QGSJET(Tp) * F_QGSJET(Tp, Egamma);
 }
+
+double dsigma_dEnu_QGSJET(double Tp, double Egamma) { return 0; }
 
 void PPGam::set_interaction_model(const std::string& model_name) {
   if (model_name == "GEANT4")
@@ -528,8 +536,7 @@ void PPGam::set_interaction_model(const std::string& model_name) {
     throw std::runtime_error("interaction model not found.");
 }
 
-double PPGam::get(double E_proj, double E_secondary) const {
-  if (E_secondary > E_proj) return 0;
+double PPGam::dsigmadE(double E_proj, double E_secondary) const {
   double value = 0;
   if (m_particle == Particle::photons) {
     if (m_intmodel == GEANT4)
@@ -541,7 +548,14 @@ double PPGam::get(double E_proj, double E_secondary) const {
     else
       value = dsigma_dEgamma_QGSJET(E_proj, E_secondary);
   } else if (m_particle == Particle::neutrinos) {
-    value = 0;  // TODO add this!
+    if (m_intmodel == GEANT4)
+      value = dsigma_dEnu_Geant4(E_proj, E_secondary);
+    else if (m_intmodel == PYTHIA8)
+      value = dsigma_dEnu_Pythia8(E_proj, E_secondary);
+    else if (m_intmodel == SIBYLL)
+      value = dsigma_dEnu_SIBYLL(E_proj, E_secondary);
+    else
+      value = dsigma_dEnu_QGSJET(E_proj, E_secondary);
   }
   return value;
 }

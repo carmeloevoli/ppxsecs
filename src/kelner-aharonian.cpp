@@ -1,4 +1,4 @@
-// Copyright Carmelo Evoli 2020
+// Copyright MIT license Carmelo Evoli 2020
 #include "kelner-aharonian.h"
 
 #include <algorithm>
@@ -86,11 +86,8 @@ double sigma_neutrinos(double E_proj, double E_nu) {
   return sigma_inel(E_p) * (F_numu + 2. * F_e) / E_p;
 }
 
-double KelnerAharonian::get(double E_proj, double E_secondary) const {
-  if (E_secondary > E_proj) return 0;
-
+double KelnerAharonian::dsigmadE(double E_proj, double E_secondary) const {
   double value = 0;
-
   if (m_particle == Particle::photons) {
     value = sigma_gamma(E_proj, E_secondary);
   } else if (m_particle == Particle::neutrinos) {

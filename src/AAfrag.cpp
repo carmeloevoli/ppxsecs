@@ -1,4 +1,4 @@
-// Copyright Carmelo Evoli 2020
+// Copyright MIT license Carmelo Evoli 2020
 #include "AAfrag.h"
 
 #include <cmath>
@@ -17,7 +17,6 @@ void AAfrag::load_table(const std::string& filename) {
   const double E_min = 1e-3;
 
   for (size_t i = 0; i < m_np; i++) gsl_vector_set(m_Ep, i, 4e3 * E_min * std::pow(1.2, i));
-
   for (size_t j = 0; j < m_ns; j++) gsl_vector_set(m_Es, j, E_min * std::pow(1.025, j));
 
   m_sigma = gsl_vector_alloc(m_np * m_ns);
@@ -47,7 +46,6 @@ double AAfrag::interpolate_table(double E_proj, double E_secondary) const {
   return gsl_spline2d_eval(spline, E_proj, E_secondary, xacc, yacc);
 }
 
-double AAfrag::get(double E_proj, double E_secondary) const {
-  if (E_secondary > E_proj) return 0;
+double AAfrag::dsigmadE(double E_proj, double E_secondary) const {
   return interpolate_table(E_proj, E_secondary) / E_secondary;
 }
