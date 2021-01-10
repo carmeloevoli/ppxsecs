@@ -35,6 +35,7 @@ set( PPXSECS_SRCS
 	src/kelner-aharonian.cpp
 	src/ppGam.cpp
 	src/utilities.cpp
+	src/xsecs-base.cpp
 	)
 
 # make library
