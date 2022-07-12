@@ -28,6 +28,10 @@ add_subdirectory(libs/cparamlib)
 list(APPEND PPXSECS_LIBRARIES cparamlib)
 list(APPEND PPXSECS_INCLUDES libs/cparamlib/include)
 
+# copy data files in build
+file(GLOB AAFRAG_DATA "libs/AAfrag/*.txt")
+file(COPY ${AAFRAG_DATA} DESTINATION ${PROJECT_BINARY_DIR}/AAfrag)
+
 # add source files
 set( PPXSECS_SRCS
 	src/AAfrag.cpp
